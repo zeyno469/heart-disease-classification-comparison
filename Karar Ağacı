@@ -1,0 +1,33 @@
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+
+dt = DecisionTreeClassifier(max_depth=3, random_state=42)
+dt.fit(X_train, y_train)
+y_pred = dt.predict(X_test)
+
+# Sonuçlar
+accuracy = accuracy_score(y_test, y_pred)
+cm = confusion_matrix(y_test, y_pred)
+
+plt.figure(figsize=(6, 4))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Oranges')
+plt.title(f'Karar Ağacı (Doğruluk: {accuracy:.2f})')
+plt.show()
+
+print("Karar Ağacı Sınıflandırma Raporu:")
+print(classification_report(y_test, y_pred))
+
+# Ağacı görselleştirme
+plt.figure(figsize=(20, 10))
+plot_tree(dt, feature_names=X.columns, class_names=['No Disease', 'Disease'], filled=True)
+plt.title('Karar Ağacı Yapısı')
+plt.show()
+
+# Özellik önemleri
+importance = dt.feature_importances_
+feature_importance = pd.DataFrame({'Feature': X.columns, 'Importance': importance})
+feature_importance = feature_importance.sort_values('Importance', ascending=False)
+
+plt.figure(figsize=(10, 6))
+sns.barplot(x='Importance', y='Feature', data=feature_importance)
+plt.title('Karar Ağacı Özellik Önemleri')
+plt.show()
