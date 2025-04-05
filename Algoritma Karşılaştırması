@@ -1,0 +1,31 @@
+models = {
+    'KNN': KNeighborsClassifier(n_neighbors=best_k),
+    'Lojistik Regresyon': LogisticRegression(max_iter=1000),
+    'Karar Ağacı': DecisionTreeClassifier(max_depth=3, random_state=42),
+    'Rastgele Orman': RandomForestClassifier(n_estimators=100, random_state=42),
+    'SVM': SVC(kernel='rbf', probability=True, random_state=42),
+    'Naive Bayes': GaussianNB()
+}
+
+results = []
+for name, model in models.items():
+    if name in ['KNN', 'Lojistik Regresyon', 'SVM']:
+        model.fit(X_train_scaled, y_train)
+        y_pred = model.predict(X_test_scaled)
+    else:
+        model.fit(X_train, y_train)
+        y_pred = model.predict(X_test)
+    
+    accuracy = accuracy_score(y_test, y_pred)
+    results.append({'Model': name, 'Accuracy': accuracy})
+
+results_df = pd.DataFrame(results).sort_values('Accuracy', ascending=False)
+
+plt.figure(figsize=(12, 6))
+sns.barplot(x='Accuracy', y='Model', data=results_df, palette='viridis')
+plt.title('Algoritma Doğruluk Karşılaştırması')
+plt.xlim(0, 1)
+plt.show()
+
+print("Algoritma Performans Karşılaştırması:")
+print(results_df)
