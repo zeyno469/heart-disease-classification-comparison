@@ -1,0 +1,19 @@
+from sklearn.metrics import roc_curve, auc
+
+plt.figure(figsize=(10, 8))
+for name, model in models.items():
+    if name in ['KNN', 'Lojistik Regresyon', 'SVM']:
+        probas = model.predict_proba(X_test_scaled)[:, 1]
+    else:
+        probas = model.predict_proba(X_test)[:, 1]
+    
+    fpr, tpr, thresholds = roc_curve(y_test, probas)
+    roc_auc = auc(fpr, tpr)
+    plt.plot(fpr, tpr, label=f'{name} (AUC = {roc_auc:.2f})')
+
+plt.plot([0, 1], [0, 1], 'k--')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('ROC Eğrileri Karşılaştırması')
+plt.legend(loc='lower right')
+plt.show()
