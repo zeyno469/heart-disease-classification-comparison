@@ -1,0 +1,25 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+# Veri setini yükleme
+url = "https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/processed.cleveland.data"
+column_names = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 
+                'exang', 'oldpeak', 'slope', 'ca', 'thal', 'target']
+data = pd.read_csv(url, names=column_names, na_values='?')
+
+# Eksik verileri temizleme
+data = data.dropna()
+
+# Hedef değişkeni binary yapalım (0: hastalık yok, 1: hastalık var)
+data['target'] = data['target'].apply(lambda x: 1 if x > 0 else 0)
+
+# Veriyi görselleştirme
+plt.figure(figsize=(12, 8))
+sns.countplot(x='target', data=data)
+plt.title('Hedef Değişken Dağılımı')
+plt.show()
