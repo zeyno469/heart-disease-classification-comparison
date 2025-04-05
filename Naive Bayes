@@ -1,0 +1,17 @@
+from sklearn.naive_bayes import GaussianNB
+
+nb = GaussianNB()
+nb.fit(X_train, y_train)
+y_pred = nb.predict(X_test)
+
+# Sonuçlar
+accuracy = accuracy_score(y_test, y_pred)
+cm = confusion_matrix(y_test, y_pred)
+
+plt.figure(figsize=(6, 4))
+sns.heatmap(cm, annot=True, fmt='d', cmap='YlOrBr')
+plt.title(f'Naive Bayes (Doğruluk: {accuracy:.2f})')
+plt.show()
+
+print("Naive Bayes Sınıflandırma Raporu:")
+print(classification_report(y_test, y_pred))
